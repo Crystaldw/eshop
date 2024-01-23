@@ -1,4 +1,4 @@
-package de.telran.eshop.domain;
+package de.telran.eshop.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -24,7 +24,7 @@ public class Order {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = SEQ_NAME)
-    @SequenceGenerator(name = SEQ_NAME, sequenceName = SEQ_NAME)
+    @SequenceGenerator(name = SEQ_NAME, sequenceName = SEQ_NAME, allocationSize = 1)
     private Long id;
 
     @CreationTimestamp //дата создания заказа будет записываться в это поле
@@ -41,6 +41,7 @@ public class Order {
 
     private String address;
 
+    //у одного заказа может быть много деталей
     @OneToMany(cascade = CascadeType.ALL)
     private List<OrderDetails> details;
 
