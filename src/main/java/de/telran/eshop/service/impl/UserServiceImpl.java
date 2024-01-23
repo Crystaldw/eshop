@@ -5,6 +5,7 @@ import de.telran.eshop.entity.Role;
 import de.telran.eshop.entity.User;
 import de.telran.eshop.repository.UserRepository;
 import de.telran.eshop.service.UserService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,7 +18,7 @@ import java.util.List;
 import java.util.Objects;
 
 @Service
-public class UserServiceImpl implements UserService{
+public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
@@ -27,9 +28,10 @@ public class UserServiceImpl implements UserService{
         this.passwordEncoder = passwordEncoder;
     }
 
+
     @Override
     public boolean save(UserDTO userDTO) {
-        if (!Objects.equals(userDTO.getPassword(), userDTO.getMatchingPassword())){
+        if (!Objects.equals(userDTO.getPassword(), userDTO.getMatchingPassword())) {
             throw new RuntimeException("Password is not equals");
         }
         User user = User.builder()
