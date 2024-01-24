@@ -2,7 +2,6 @@ package de.telran.eshop.config;
 
 import de.telran.eshop.entity.Role;
 import de.telran.eshop.service.UserService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,8 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
 @EnableWebSecurity
-
-public class SecurityConfig {
+public class WebSecurityConfig {
 
     private UserService userService;
 
@@ -40,28 +38,30 @@ public class SecurityConfig {
     }
 
     @Autowired
-    public void configure(AuthenticationManagerBuilder auth) throws Exception {
+    public void configure(AuthenticationManagerBuilder auth) {
         auth.authenticationProvider(authenticationProvider());
     }
 
 
     @Autowired
     public void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests()
+        http
+                .authorizeHttpRequests((authorizeRequest)->
+                        authorizeRequest
                 .requestMatchers("/users/new").hasAuthority(Role.ADMIN.name())
                 .anyRequest().permitAll()
-                .and()
-                .formLogin()
+                )
+                .formLogin(customizer->customizer
                 .loginPage("/login")
                 .loginProcessingUrl("/auth")
                 .permitAll()
-                .and()
-                .logout()
+                )
+                .logout(customizer->customizer
                 .logoutUrl("/logout")
                 .logoutSuccessUrl("/")
                 .deleteCookies("JSESSIONID")
                 .invalidateHttpSession(true)
-                .and()
-                .csrf().disable();
+                );
+
     }
 }
