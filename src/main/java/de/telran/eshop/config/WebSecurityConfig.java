@@ -46,21 +46,22 @@ public class WebSecurityConfig {
     @Autowired
     public void configure(HttpSecurity http) throws Exception {
         http
-                .authorizeHttpRequests((authorizeRequest)->
+                .authorizeHttpRequests((authorizeRequest) ->
                         authorizeRequest
-                .requestMatchers("/users/new").hasAuthority(Role.ADMIN.name())
-                .anyRequest().permitAll()
+                                .requestMatchers("/users/new").hasAuthority(Role.ADMIN.name())
+                                .anyRequest().permitAll()
                 )
-                .formLogin(customizer->customizer
-                .loginPage("/login")
-                .loginProcessingUrl("/auth")
-                .permitAll()
+                .formLogin(customizer -> customizer
+                        .loginPage("/login")
+                        .failureUrl("/login-error")
+                        .loginProcessingUrl("/auth")
+                        .permitAll()
                 )
-                .logout(customizer->customizer
-                .logoutUrl("/logout")
-                .logoutSuccessUrl("/")
-                .deleteCookies("JSESSIONID")
-                .invalidateHttpSession(true)
+                .logout(customizer -> customizer
+                        .logoutUrl("/logout")
+                        .logoutSuccessUrl("/")
+                        .deleteCookies("JSESSIONID")
+                        .invalidateHttpSession(true)
                 );
 
     }
