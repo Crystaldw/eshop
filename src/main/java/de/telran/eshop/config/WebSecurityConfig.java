@@ -11,6 +11,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.SecurityFilterChain;
 
 
 @Configuration
@@ -43,15 +44,15 @@ public class WebSecurityConfig {
     }
 
 
-    @Autowired
-    public void configure(HttpSecurity http) throws Exception {
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests((authorizeRequest) ->
                         authorizeRequest
                                 .requestMatchers("/users/new").hasAuthority(Role.ADMIN.name())
                                 .anyRequest().permitAll()
                 )
-                .formLogin(customizer -> customizer
+                .formLogin(login->login
                         .loginPage("/login")
                         .failureUrl("/login-error")
                         .loginProcessingUrl("/auth")
@@ -63,6 +64,7 @@ public class WebSecurityConfig {
                         .deleteCookies("JSESSIONID")
                         .invalidateHttpSession(true)
                 );
+        return http.build();
 
     }
 }

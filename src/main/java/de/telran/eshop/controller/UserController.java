@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/users")
 public class UserController {
 
+    @Autowired
     private final UserService userService;
 
     @Autowired
@@ -22,6 +23,7 @@ public class UserController {
 
     @GetMapping
     public String userList(Model model){
+
         model.addAttribute("users", userService.getAll());
         return "userlist";
     }
