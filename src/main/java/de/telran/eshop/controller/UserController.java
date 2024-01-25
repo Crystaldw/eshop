@@ -22,25 +22,28 @@ public class UserController {
     }
 
     @GetMapping
-    public String userList(Model model){
-
+    public String userList(Model model) {
+        //проверяю открытие созданной страницы error
+//        if(1==1){
+//            throw new RuntimeException("test of error handling");
+//        }
         model.addAttribute("users", userService.getAll());
         return "userlist";
     }
 
     @GetMapping("/new")
-    public String newUser(Model model){
+    public String newUser(Model model) {
         model.addAttribute("user", new UserDTO());
         return "user";
     }
 
     @PostMapping("/new")
-    public String saveUser(UserDTO dto, Model model){
-        if(userService.save(dto)){
+    public String saveUser(UserDTO dto, Model model) {
+        if (userService.save(dto)) {
             return "redirect:/users";
-        }else {
-                model.addAttribute("user", dto);
-                return "user";
+        } else {
+            model.addAttribute("user", dto);
+            return "user";
         }
     }
 }
