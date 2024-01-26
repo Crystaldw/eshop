@@ -52,12 +52,6 @@ public class UserServiceImpl implements UserService {
                 .collect(Collectors.toList());
     }
 
-    private UserDTO toDTO(User user) {
-        return UserDTO.builder()
-                .username(user.getName())
-                .email(user.getEmail())
-                .build();
-    }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -73,5 +67,12 @@ public class UserServiceImpl implements UserService {
                 user.getPassword(),
                 roles
         );
+    }
+
+    private UserDTO toDTO(User user) {
+        return UserDTO.builder()
+                .username(user.getName())
+                .email(user.getEmail())
+                .build();
     }
 }

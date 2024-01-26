@@ -50,7 +50,11 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests((authorizeRequest) ->
                         authorizeRequest
                                 .requestMatchers("/users/new").hasAuthority(Role.ADMIN.name())
+                                .requestMatchers("/users").hasAnyAuthority(Role.ADMIN.name(), Role.MANAGER.name())
                                 .anyRequest().permitAll()
+//                                .requestMatchers("/users").hasAnyRole("ADMIN", "MANAGER")
+//                                .requestMatchers("/users").hasAuthority(Role.ADMIN.name())
+//                                .requestMatchers("/users").hasAuthority(Role.MANAGER.name())
                 )
                 .formLogin(login->login
                         .loginPage("/login")
@@ -58,7 +62,7 @@ public class WebSecurityConfig {
                         .loginProcessingUrl("/auth")
                         .permitAll()
                 )
-                .logout(customizer -> customizer
+                .logout(logout->logout
                         .logoutUrl("/logout")
                         .logoutSuccessUrl("/")
                         .deleteCookies("JSESSIONID")
