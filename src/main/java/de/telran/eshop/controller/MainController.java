@@ -28,7 +28,6 @@ public class MainController {
         model.addAttribute("loginError", true);
         return "login";
     }
-
     @GetMapping("/logout")
     public String logout(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
         new SecurityContextLogoutHandler().logout(request, response, authentication);
