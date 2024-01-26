@@ -5,6 +5,7 @@ import de.telran.eshop.entity.Role;
 import de.telran.eshop.entity.User;
 import de.telran.eshop.repository.UserRepository;
 import de.telran.eshop.service.UserService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -74,5 +75,34 @@ public class UserServiceImpl implements UserService {
                 .username(user.getName())
                 .email(user.getEmail())
                 .build();
+    }
+
+    @Override
+    public User findByName(String name) {
+        return userRepository.findFirstByName(name);  //найти по имени
+    }
+
+    @Override
+    @Transactional
+    public void updateProfile(UserDTO dto) {
+        User saveUser = userRepository.findFirstByName((dto.getUsername()));  // находим пользователя по dto
+        if(saveUser == null){
+            throw new RuntimeException("User not found by name "+ dto.getUsername()); //если пользоаатель не найден выкидываем ошибку
+        }
+
+
+        boolean isChanged = false;
+        if(dto.getPassword() != null && !dto.getPassword().isEmpty()){
+            saveUser.setPassword(passwordEncoder.encode(dto.getPassword()));
+            isChanged = true;
+        }
+        if(!Objects.equals(dto.getEmail(), saveUser.getEmail())){
+            saveUser.setEmail(dto.getEmail());
+            isChanged = true;
+        }
+
+        if(isChanged){
+            userRepository.save(saveUser);  // если небыло изменений мы не будем ничего сохранять
+        }
     }
 }

@@ -13,14 +13,14 @@
                     <td>Menu -></td>
                     <td><a th:href="@{/}">Home</a></td>
                     <td><a th:href="@{/products}">Products</a></td>
-                    <td><a th:href="@{/users}">Users</a></td>
+                    <td sec:authorize="hasAnyAuthority('ADMIN', 'MANAGER')"><a th:href="@{/users}">Users</a></td>
                 </tr>
             </table>
         </td>
         <td align="right">
             <div sec:authorize="isAuthenticated()">
                 <div>
-                    Hello, <span sec:authentication="principal.username">Bill</span>
+                    Hello, <a th:href="@{/users/profile}"><span sec:authentication="principal.username">Bill</span></a>
                 </div>
                 <div>
                     <a th:href="@{/logout}">Logout</a>
