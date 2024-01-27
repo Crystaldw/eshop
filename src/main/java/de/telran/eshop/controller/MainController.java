@@ -1,5 +1,6 @@
 package de.telran.eshop.controller;
 
+import de.telran.eshop.service.SessionObjectHolder;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.core.Authentication;
@@ -12,8 +13,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 public class MainController {
 
+    private final SessionObjectHolder sessionObjectHolder;
+
+    public MainController(SessionObjectHolder sessionObjectHolder) {
+        this.sessionObjectHolder = sessionObjectHolder;
+    }
+
     @RequestMapping({"/", ""})
-    public String index(){
+    public String index(Model model){
+        model.addAttribute("amountClicks", sessionObjectHolder.getAmountClicks());
         return "index";
     }
 
