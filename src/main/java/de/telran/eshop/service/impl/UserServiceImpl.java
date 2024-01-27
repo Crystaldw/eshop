@@ -47,6 +47,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public void save(User user) {
+        userRepository.save(user);
+    }
+
+    @Override
     public List<UserDTO> getAll() {
         return userRepository.findAll().stream()
                 .map(this::toDTO)
@@ -86,22 +91,22 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public void updateProfile(UserDTO dto) {
         User saveUser = userRepository.findFirstByName((dto.getUsername()));  // находим пользователя по dto
-        if(saveUser == null){
-            throw new RuntimeException("User not found by name "+ dto.getUsername()); //если пользоаатель не найден выкидываем ошибку
+        if (saveUser == null) {
+            throw new RuntimeException("User not found by name " + dto.getUsername()); //если пользоаатель не найден выкидываем ошибку
         }
 
 
         boolean isChanged = false;
-        if(dto.getPassword() != null && !dto.getPassword().isEmpty()){
+        if (dto.getPassword() != null && !dto.getPassword().isEmpty()) {
             saveUser.setPassword(passwordEncoder.encode(dto.getPassword()));
             isChanged = true;
         }
-        if(!Objects.equals(dto.getEmail(), saveUser.getEmail())){
+        if (!Objects.equals(dto.getEmail(), saveUser.getEmail())) {
             saveUser.setEmail(dto.getEmail());
             isChanged = true;
         }
 
-        if(isChanged){
+        if (isChanged) {
             userRepository.save(saveUser);  // если небыло изменений мы не будем ничего сохранять
         }
     }
