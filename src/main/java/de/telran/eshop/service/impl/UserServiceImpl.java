@@ -1,23 +1,19 @@
 package de.telran.eshop.service.impl;
 
 import de.telran.eshop.dto.UserDTO;
-import de.telran.eshop.entity.Role;
+import de.telran.eshop.entity.enums.Role;
 import de.telran.eshop.entity.User;
 import de.telran.eshop.repository.UserRepository;
 import de.telran.eshop.service.UserService;
 import jakarta.transaction.Transactional;
-import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -53,26 +49,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<UserDTO> getAll() {
-        return userRepository.findAll().stream()
+        return StreamSupport.stream(userRepository.findAll().spliterator(), false)
                 .map(this::toDTO)
                 .collect(Collectors.toList());
-    }
-
-
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findFirstByName(username);
-        if (user == null) {
-            throw new UsernameNotFoundException("User not found with name: " + username);
-        }
-        List<GrantedAuthority> roles = new ArrayList<>();
-        roles.add(new SimpleGrantedAuthority(user.getRole().name()));
-
-        return new org.springframework.security.core.userdetails.User(
-                user.getName(),
-                user.getPassword(),
-                roles
-        );
     }
 
     private UserDTO toDTO(User user) {

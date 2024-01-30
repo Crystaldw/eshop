@@ -1,9 +1,9 @@
 package de.telran.eshop.repository;
 
-import de.telran.eshop.entity.Bucket;
+import de.telran.eshop.entity.Order;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface BucketRepository extends JpaRepository<Bucket, Long> {
+public interface OrderRepository extends JpaRepository<Order, Long> {
 }

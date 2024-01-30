@@ -6,7 +6,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 
 import java.util.List;
 
-public interface UserService extends UserDetailsService { //security
+public interface UserService { //security
 
     boolean save(UserDTO userDTO);
     void save(User user);

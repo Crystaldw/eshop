@@ -25,6 +25,5 @@ public class SessionObjectHolder {
 
     public void addClicks() {
         amountClicks++;
-        System.out.println(amountClicks);
     }
 }

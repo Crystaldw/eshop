@@ -2,14 +2,13 @@ drop sequence if exists user_seq;
 create sequence user_seq start with 1 increment by 1;
 create table users
 (
-    id        bigint not null,
-    archive   boolean,
-    bucket_id bigint unique,
-    email     varchar(255),
-    name      varchar(255),
-    password  varchar(255),
-    role      varchar(255) check (role in ('CLIENT', 'ADMIN', 'MANAGER')),
-    seq_name  varchar(255),
+    id       bigint not null,
+    archive  boolean,
+    email    varchar(255),
+    name     varchar(255),
+    password varchar(255),
+    role     varchar(255) check (role in ('CLIENT', 'ADMIN', 'MANAGER')),
+    seq_name varchar(255),
     primary key (id)
 );
 
@@ -25,8 +24,6 @@ create table buckets
 );
 alter table if exists buckets
     add constraint buckets foreign key (user_id) references users;
-alter table if exists users
-    add constraint users foreign key (bucket_id) references buckets;
 
 
 create table buckets_products

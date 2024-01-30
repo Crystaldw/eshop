@@ -1,4 +1,4 @@
-package de.telran.eshop.entity;
+package de.telran.eshop.entity.enums;
 
 public enum Role {
     CLIENT, ADMIN, MANAGER

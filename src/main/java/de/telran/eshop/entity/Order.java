@@ -1,5 +1,6 @@
 package de.telran.eshop.entity;
 
+import de.telran.eshop.entity.enums.OrderStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
