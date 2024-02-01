@@ -8,5 +8,7 @@ public interface ProductService {
 
     List<ProductDTO>getAll();
 
+    boolean save(ProductDTO productDTO);
+
     void addToUserBucket(Long productId, String username);
 }

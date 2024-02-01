@@ -17,7 +17,7 @@ import java.util.List;
 @Table(name = "products")
 public class Product {
 
-    private final String SEQ_NAME = "product_seq";
+    private static final String SEQ_NAME = "product_seq";
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = SEQ_NAME)

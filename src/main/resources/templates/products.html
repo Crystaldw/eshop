@@ -7,11 +7,10 @@
 <body>
 <div th:insert="~{fragments/menu :: #nav-menu}"></div>
 
-    <table border="1" align="center">
+    <table border="1" >
         <tr>
             <td>Title</td>
             <td>Price</td>
-            <td></td>
         </tr>
         <tr th:each="product : ${products}">
             <td th:text="${product.title}">Cheese</td>
@@ -19,5 +18,8 @@
             <td><a th:href="@{/products/{id}/bucket(id=${product.id})}">Add to bucket</a></td>
         </tr>
     </table>
+        <a th:href="@{products/new}">Add new</a>
+
+</form>
 </body>
 </html>

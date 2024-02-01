@@ -1,7 +1,6 @@
 package de.telran.eshop.entity;
 
 import de.telran.eshop.entity.enums.Role;
-import de.telran.eshop.repository.UserRepository;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -10,8 +9,6 @@ import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import java.util.*;
 
@@ -23,7 +20,7 @@ import java.util.*;
 @Table(name = "users")
 public class User implements UserDetails {
 
-    private final String SEQ_NAME = "user_seq";  //переменная-чтобы не нпзначать ID ручным способом
+    private static final String SEQ_NAME = "user_seq";
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = SEQ_NAME)

@@ -16,7 +16,7 @@ import java.math.BigDecimal;
 @Table(name = "orders_details")
 public class OrderDetails {
 
-    private final String SEQ_NAME = "order_details_seq";
+    private static final String SEQ_NAME = "order_details_seq";
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = SEQ_NAME)

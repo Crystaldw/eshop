@@ -45,6 +45,19 @@ public class UserController {
     }
 
     /**
+     * Сохраняет нового пользователя.
+     */
+    @PostMapping("/new")
+    public String saveUser(UserDTO userDto, Model model) {
+        if (userService.save(userDto)) {
+            return "redirect:/users";
+        } else {
+            model.addAttribute("user", userDto);
+            return "user";
+        }
+    }
+
+    /**
      * Получает роли пользователя.
      */
     @PostAuthorize("isAuthenticated() and #username==authentication.principal.username")
@@ -56,19 +69,6 @@ public class UserController {
         return byName.getRole().name();
     }
 
-
-    /**
-     * Сохраняет нового пользователя.
-     */
-    @PostMapping("/new")
-    public String saveUser(UserDTO dto, Model model) {
-        if (userService.save(dto)) {
-            return "redirect:/users";
-        } else {
-            model.addAttribute("user", dto);
-            return "user";
-        }
-    }
 
     /**
      * Отображает профиль пользователя.

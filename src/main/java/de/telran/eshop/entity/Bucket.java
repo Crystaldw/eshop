@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Date;
 import java.util.List;
 
 @Data
@@ -15,12 +16,13 @@ import java.util.List;
 @Entity
 @Table(name = "buckets")
 public class Bucket {
-    private final String SEQ_NAME = "bucket_seq"; //переменная для авто ID
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = SEQ_NAME)
-    @SequenceGenerator(name = SEQ_NAME, sequenceName = SEQ_NAME, allocationSize = 1)
-    private Long id;
+        private static final String SEQ_NAME = "bucket_seq";
+
+        @Id
+        @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = SEQ_NAME)
+        @SequenceGenerator(name = SEQ_NAME, sequenceName = SEQ_NAME, allocationSize = 1)
+        private Long id;
 
     @OneToOne  //одна корзина-один пользователь
     @JoinColumn(name = "user_id") //присоединимся к колонке user_id
@@ -32,6 +34,9 @@ public class Bucket {
             joinColumns = @JoinColumn(name = "bucket_id"),
             inverseJoinColumns = @JoinColumn(name = "product_id"))
     private List<Product> products;
+
+
+    private Date createDate;
 
 
 }

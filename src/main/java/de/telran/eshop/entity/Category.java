@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "categories")
 public class Category {
 
-    private final String SEQ_NAME = "category_seq";
+    private static final String SEQ_NAME = "category_seq";
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = SEQ_NAME)
@@ -22,7 +22,6 @@ public class Category {
     private Long id;
 
     private String title;
-
 
 
 }

@@ -45,7 +45,7 @@ public class WebSecurityConfig {
         http
                 .authorizeHttpRequests((authorizeRequest) ->
                                 authorizeRequest
-//                                .requestMatchers("/users/new").hasAuthority(Role.ADMIN.name()) //заменил анотацией в контроллере @PreAuthorize
+                                .requestMatchers("/users/new").hasAuthority(Role.ADMIN.name()) //заменил анотацией в контроллере @PreAuthorize
                                         .requestMatchers("/users").hasAnyAuthority(Role.ADMIN.name(), Role.MANAGER.name())
                                         .anyRequest().permitAll()
                 )

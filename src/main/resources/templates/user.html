@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th = "http://www.w3.org/1999/xhtml" xmlns:sec="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <title>Add user</title>
@@ -14,17 +14,17 @@
             <td><input type="text" th:field="*{username}"></td>
         </tr>
         <tr>
-        <td>Password</td>
-        <td><input type="password" th:field="*{password}"></td>
-    </tr>
+            <td>Password</td>
+            <td><input type="password" th:field="*{password}"></td>
+        </tr>
         <tr>
-        <td>Matching password</td>
-        <td><input type="password" th:field="*{matchingPassword}"></td>
-    </tr>
+            <td>Matching password</td>
+            <td><input type="password" th:field="*{matchingPassword}"></td>
+        </tr>
         <tr>
-        <td>Email</td>
-        <td><input type="email" th:field="*{email}"></td>
-    </tr>
+            <td>Email</td>
+            <td><input type="email" th:field="*{email}"></td>
+        </tr>
     </table>
     <button type="submit">Save</button>
 </form>

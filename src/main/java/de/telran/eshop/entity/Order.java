@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -19,9 +20,9 @@ import java.util.List;
 @Entity
 @Builder
 @Table(name = "orders")
-public class Order {
+public class Order implements Serializable {
 
-    private final String SEQ_NAME = "order_seq";
+    private static final String SEQ_NAME = "order_seq";
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = SEQ_NAME)
