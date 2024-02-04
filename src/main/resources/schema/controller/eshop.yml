@@ -1,0 +1,13 @@
+get:
+  tags:
+    - eshop
+  summary: running butch file
+  description: It will load csv file to db
+  operationId: startEshop
+  responses:
+    '200':
+      description: ''
+      content:
+        application/json:
+          schema:
+            type: string

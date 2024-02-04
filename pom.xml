@@ -15,6 +15,10 @@
     <description>eshop</description>
     <properties>
         <java.version>17</java.version>
+        <maven.encoding>UTF-8</maven.encoding>
+        <maven.source.compiler>${java.version}</maven.source.compiler>
+        <maven.target.compiler>${java.version}</maven.target.compiler>
+
     </properties>
     <dependencies>
         <dependency>
@@ -84,6 +88,29 @@
             <artifactId>mapstruct-processor</artifactId>
             <version>1.5.5.Final</version>
         </dependency>
+       <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+            <version>2.3.0</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.openapitools/jackson-databind-nullable -->
+        <dependency>
+            <groupId>org.openapitools</groupId>
+            <artifactId>jackson-databind-nullable</artifactId>
+            <version>0.2.6</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <version>3.12.1</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/javax.servlet/javax.servlet-api -->
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>4.0.1</version>
+            <scope>provided</scope>
+        </dependency>
 
 
     </dependencies>
@@ -101,6 +128,53 @@
                         </exclude>
                     </excludes>
                 </configuration>
+            </plugin>
+            <plugin>
+                <!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-compiler-plugin -->
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>3.12.1</version>
+                <configuration>
+                    <source>${maven.source.compiler}</source>
+                    <target>${maven.target.compiler}</target>
+                    <encoding>${maven.encoding}</encoding>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.openapitools</groupId>
+                <artifactId>openapi-generator-maven-plugin</artifactId>
+                <!-- RELEASE_VERSION -->
+                <version>7.2.0</version>
+                <!-- /RELEASE_VERSION -->
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <inputSpec>${project.basedir}/src/main/resources/schema/api.yaml</inputSpec>
+                            <generatorName>spring</generatorName>
+                            <packageName>de.telran.eshop</packageName>
+                            <apiPackage>de.telran.eshop.api</apiPackage>
+                            <modelPackage>de.telran.eshop.model</modelPackage>
+                            <generateSupportingFiles>true</generateSupportingFiles>
+                            <generateApiDocumentation>true</generateApiDocumentation>
+                            <generateModels>true</generateModels>
+                            <generateApis>true</generateApis>
+                            <configOptions>
+                                <useSpringBoot3>true</useSpringBoot3>
+                                <useTags>true</useTags>
+                                <useSpringController>true</useSpringController>
+                                <interfaceOnly>true</interfaceOnly>
+                                <dateLibrary>java8</dateLibrary>
+                                <additionalModelTypeAnnotations>
+                                    @lombok.Setter
+                                    @lombok.Getter
+                                </additionalModelTypeAnnotations>
+                            </configOptions>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
