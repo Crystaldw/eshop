@@ -13,4 +13,6 @@ public interface BucketService {
     void addProducts(Bucket bucket, List<Long> productIds);
 
     BucketDTO getBucketByUser(String name);
+
+    Bucket removeProductFromCart(Long userId, Long productId);
 }

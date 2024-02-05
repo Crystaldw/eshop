@@ -10,6 +10,7 @@ import de.telran.eshop.repository.ProductRepository;
 import de.telran.eshop.service.BucketService;
 import de.telran.eshop.service.ProductService;
 import de.telran.eshop.service.UserService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -20,6 +21,7 @@ import java.util.Objects;
 import static org.springframework.data.jpa.domain.AbstractPersistable_.id;
 
 @Service
+@RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService {
 
     private final ProductMapper mapper = ProductMapper.MAPPER;
@@ -27,12 +29,6 @@ public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
     private final UserService userService;
     private final BucketService bucketService;
-
-    public ProductServiceImpl(ProductRepository productRepository, UserService userService, BucketService bucketService) {
-        this.productRepository = productRepository;
-        this.userService = userService;
-        this.bucketService = bucketService;
-    }
 
 
     @Override
