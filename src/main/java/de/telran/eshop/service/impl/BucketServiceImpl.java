@@ -80,4 +80,9 @@ public class BucketServiceImpl implements BucketService {
         return bucketDTO;
     }
 
+    @Override
+    public Bucket removeProductFromCart(Long userId, Long productId) {
+        return null;
+    }
+
 }
