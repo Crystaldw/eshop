@@ -14,13 +14,17 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
-
+/**
+ * Конфигурационный класс для настройки безопасности веб-приложения с использованием Spring Security.
+ */
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity(securedEnabled = true, jsr250Enabled = true)
-//@EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true, jsr250Enabled = true)
 public class WebSecurityConfig {
 
+    /**
+     * Определяет сервис пользователей для Spring Security, используя репозиторий пользователей.
+     */
     @Bean
     public UserDetailsService userDetailsService(UserRepository userRepository) {
         UserDetailsService userDetailsService = (username) -> {
@@ -34,20 +38,26 @@ public class WebSecurityConfig {
         return userDetailsService;
     }
 
+    /**
+     * Определяет кодировщик паролей для использования в Spring Security.
+     */
     @Bean
     public PasswordEncoder passwordEncoder() {
         BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
         return bCryptPasswordEncoder;
     }
 
+    /**
+     * Определяет цепочку фильтров безопасности для HTTP запросов.
+     */
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests((authorizeRequest) ->
-                                authorizeRequest
-                                .requestMatchers("/users/new").hasAuthority(Role.ADMIN.name()) //заменил анотацией в контроллере @PreAuthorize
-                                        .requestMatchers("/users").hasAnyAuthority(Role.ADMIN.name(), Role.MANAGER.name())
-                                        .anyRequest().permitAll()
+                        authorizeRequest
+                                .requestMatchers("/users/new").hasAuthority(Role.ADMIN.name())
+                                .requestMatchers("/users").hasAnyAuthority(Role.ADMIN.name(), Role.MANAGER.name())
+                                .anyRequest().permitAll()
                 )
                 .formLogin(login -> login
                         .loginPage("/login")
