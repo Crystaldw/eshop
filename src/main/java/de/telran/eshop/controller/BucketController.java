@@ -10,6 +10,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.security.Principal;
 
+/**
+ * Контроллер, обрабатывающий запросы, связанные с корзиной покупок.
+ */
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/bucket")
@@ -17,6 +20,9 @@ public class BucketController {
 
     private final BucketService bucketService;
 
+    /**
+     * Отображает информацию о корзине пользователя.
+     */
     @GetMapping
     public String aboutBucket(Model model, Principal principal) {
         if (principal == null) {
@@ -27,6 +33,4 @@ public class BucketController {
         }
         return "bucket";
     }
-
-
 }
