@@ -20,6 +20,9 @@ import java.util.Objects;
 
 import static org.springframework.data.jpa.domain.AbstractPersistable_.id;
 
+/**
+ * Реализация сервиса для управления продуктами.
+ */
 @Service
 @RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService {
@@ -30,12 +33,23 @@ public class ProductServiceImpl implements ProductService {
     private final UserService userService;
     private final BucketService bucketService;
 
-
+    /**
+     * Получает список всех продуктов.
+     *
+     * @return список всех продуктов в формате DTO
+     */
     @Override
     public List<ProductDTO> getAll() {
         return mapper.fromProductList((List<Product>) productRepository.findAll());
     }
 
+    /**
+     * Сохраняет новый продукт.
+     *
+     * @param productDTO информация о продукте в формате DTO
+     * @return true, если продукт успешно сохранен, в противном случае - false
+     * @throws IllegalArgumentException если название продукта пустое или цена отрицательная
+     */
     @Override
     public boolean save(ProductDTO productDTO) {
         if (productDTO.getTitle() == null || productDTO.getTitle().isEmpty()) {
@@ -52,14 +66,19 @@ public class ProductServiceImpl implements ProductService {
         return true;
     }
 
+    /**
+     * Добавляет указанный продукт в корзину пользователя.
+     *
+     * @param productId идентификатор добавляемого продукта
+     * @param username  имя пользователя, чья корзина будет обновлена
+     * @throws RuntimeException если пользователь не найден
+     */
     @Override
     public void addToUserBucket(Long productId, String username) {
-
         User user = userService.findByName(username);
         if (user == null) {
-            throw new RuntimeException("User not found - " + username);
+            throw new RuntimeException("Пользователь не найден - " + username);
         }
-
         Bucket bucket = user.getBucket();
         if (bucket == null) {
             Bucket newBucket = bucketService.createBucked(user, Collections.singletonList(productId));

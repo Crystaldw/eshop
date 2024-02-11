@@ -8,22 +8,41 @@ import lombok.NoArgsConstructor;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * DTO (Data Transfer Object), представляющий корзину покупок.
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class BucketDTO {
+
+    /**
+     * Количество товаров в корзине.
+     */
     private int amountProduct;
+
+    /**
+     * Сумма покупок в корзине.
+     */
     private Double sum;
+
+    /**
+     * Список товаров корзины покупок.
+     */
     private List<BucketDetailDTO> bucketDetails = new ArrayList<>();
 
-    //агренирует сумму добавленного в корзину товара
+    /**
+     * Метод для агрегации суммы добавленных в корзину товаров.
+     */
     public void aggregate(){
-        this.amountProduct=bucketDetails.size();
-        this.sum = bucketDetails.stream()
-                .map(BucketDetailDTO :: getSum)
-                .mapToDouble(Double::doubleValue)
-                .sum();
+        // Определение количества товаров в корзине
+        this.amountProduct = bucketDetails.size();
 
+        // Вычисление общей суммы покупок в корзине
+        this.sum = bucketDetails.stream()
+                .map(BucketDetailDTO::getSum) // Получение суммы каждой детали корзины
+                .mapToDouble(Double::doubleValue) // Преобразование в Double
+                .sum(); // Суммирование
     }
 }

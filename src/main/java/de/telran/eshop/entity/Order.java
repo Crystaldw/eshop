@@ -14,6 +14,9 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
+/**
+ * Сущность, представляющая заказ в системе.
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -24,32 +27,52 @@ public class Order implements Serializable {
 
     private static final String SEQ_NAME = "order_seq";
 
+    /**
+     * Уникальный идентификатор заказа.
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = SEQ_NAME)
     @SequenceGenerator(name = SEQ_NAME, sequenceName = SEQ_NAME, allocationSize = 1)
     private Long id;
 
-    @CreationTimestamp //дата создания заказа будет записываться в это поле
+    /**
+     * Дата и время создания заказа.
+     */
+    @CreationTimestamp
     private LocalDateTime created;
 
-    @UpdateTimestamp //обновление заказа (чтобы автомвтом все было)
+    /**
+     * Дата и время последнего обновления заказа.
+     */
+    @UpdateTimestamp
     private LocalDateTime updated;
 
-    @ManyToOne //множество заказов к одному пользователю
+    /**
+     * Пользователь, сделавший заказ.
+     */
+    @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
 
+    /**
+     * Общая сумма заказа.
+     */
     private BigDecimal sum;
 
+    /**
+     * Адрес доставки заказа.
+     */
     private String address;
 
-    //у одного заказа может быть много деталей
+    /**
+     * Список деталей заказа.
+     */
     @OneToMany(cascade = CascadeType.ALL)
     private List<OrderDetails> details;
 
+    /**
+     * Статус заказа.
+     */
     @Enumerated(EnumType.STRING)
     private OrderStatus status;
-
-
-
 }

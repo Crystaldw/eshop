@@ -5,27 +5,32 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-/*
-DTO расшифровывается как "Data Transfer Object" (Объект передачи
-данных). Это шаблон проектирования, используемый для передачи
-данных между компонентами системы. DTO представляет собой объект,
-который переносит данные между уровнями приложения, такими как у
-ровень представления (например, пользовательский интерфейс),
-уровень обработки данных и уровень доступа к данным.
+/**
+ * DTO, представляющий информацию о пользователе.
  */
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class UserDTO {
 
+    /**
+     * Имя пользователя.
+     */
     private String username;
 
+    /**
+     * Пароль пользователя.
+     */
     private String password;
 
+    /**
+     * Подтверждение пароля пользователя.
+     */
     private String matchingPassword;
 
+    /**
+     * Электронная почта пользователя.
+     */
     private String email;
-
 }

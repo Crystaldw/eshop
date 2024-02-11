@@ -6,11 +6,9 @@ import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.WebApplicationContext;
 
-/*
-Класс аннотирован как компонент Spring (@Component) с областью
-видимости сеанса (@Scope(value = WebApplicationContext.SCOPE_SESSION)).
-Это означает, что каждый пользователь будет иметь свой экземпляр этого объекта в рамках
-своей сессии, и его состояние будет сохраняться между запросами.
+/**
+ * Компонент Spring для хранения состояния между запросами для каждого пользователя в рамках их сессии.
+ * Каждый экземпляр этого класса создается для каждого пользователя и сохраняет свое состояние между запросами.
  */
 @Getter
 @Component
@@ -19,10 +17,16 @@ public class SessionObjectHolder {
 
     private long amountClicks = 0;
 
+    /**
+     * Создает новый объект SessionObjectHolder.
+     */
     public SessionObjectHolder() {
         System.out.println("Session object created. ");  // выведет в консоль информацию
     }
 
+    /**
+     * Увеличивает количество кликов на единицу.
+     */
     public void addClicks() {
         amountClicks++;
     }

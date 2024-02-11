@@ -12,6 +12,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.*;
 
+/**
+ * Сущность, представляющая пользователя в системе.
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -22,23 +25,44 @@ public class User implements UserDetails {
 
     private static final String SEQ_NAME = "user_seq";
 
+    /**
+     * Уникальный идентификатор пользователя.
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = SEQ_NAME)
     @SequenceGenerator(name = SEQ_NAME, sequenceName = SEQ_NAME, allocationSize = 1)
     private Long id;
 
+    /**
+     * Имя пользователя.
+     */
     private String name;
 
+    /**
+     * Пароль пользователя.
+     */
     private String password;
 
+    /**
+     * Адрес электронной почты пользователя.
+     */
     private String email;
 
+    /**
+     * Признак архивации пользователя.
+     */
     private Boolean archive;
 
-    @Enumerated(EnumType.STRING)  //    роли пользователя
+    /**
+     * Роль пользователя.
+     */
+    @Enumerated(EnumType.STRING)
     private Role role;
 
-    //один пользователь - одна корзина. При удалении пользователя-корзину тоже удаляем
+    /**
+     * Корзина пользователя. Один пользователь - одна корзина.
+     * При удалении пользователя, корзина также удаляется.
+     */
     @OneToOne(mappedBy = "user", cascade = CascadeType.REMOVE)
     private Bucket bucket;
 

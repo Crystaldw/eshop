@@ -13,11 +13,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.UUID;
 
+/**
+ * Главный контроллер приложения, управляющий запросами на отображение различных страниц и обработку событий.
+ */
 @Controller
 public class MainController {
 
     private final SessionObjectHolder sessionObjectHolder;
 
+    /**
+     * Конструктор контроллера.
+     * @param sessionObjectHolder Объект, хранящий информацию о сессии пользователя.
+     */
     public MainController(SessionObjectHolder sessionObjectHolder) {
         this.sessionObjectHolder = sessionObjectHolder;
     }

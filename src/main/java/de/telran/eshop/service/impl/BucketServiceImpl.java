@@ -19,6 +19,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+/**
+ * Реализация интерфейса {@link BucketService}, предоставляющая функциональность работы с корзиной покупок.
+ */
 @Service
 @RequiredArgsConstructor
 public class BucketServiceImpl implements BucketService {
@@ -27,6 +30,13 @@ public class BucketServiceImpl implements BucketService {
     private final ProductRepository productRepository;
     private final UserService userService;
 
+    /**
+     * Создает новую корзину для указанного пользователя и добавляет в неё товары.
+     *
+     * @param user       пользователь, для которого создается корзина
+     * @param productIds список идентификаторов товаров, которые необходимо добавить в корзину
+     * @return созданная корзина
+     */
     @Override
     public Bucket createBucked(User user, List<Long> productIds) {
         Bucket bucket = new Bucket();
@@ -43,6 +53,12 @@ public class BucketServiceImpl implements BucketService {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Добавляет товары в существующую корзину.
+     *
+     * @param bucket     корзина, в которую добавляются товары
+     * @param productIds список идентификаторов товаров, которые необходимо добавить
+     */
     @Override
     public void addProducts(Bucket bucket, List<Long> productIds) {
         List<Product> products = bucket.getProducts();
@@ -53,6 +69,12 @@ public class BucketServiceImpl implements BucketService {
 
     }
 
+    /**
+     * Получает корзину по имени пользователя.
+     *
+     * @param name имя пользователя
+     * @return корзина пользователя в формате DTO
+     */
     @Override
     public BucketDTO getBucketByUser(String name) {
         User user = userService.findByName(name);
@@ -80,6 +102,13 @@ public class BucketServiceImpl implements BucketService {
         return bucketDTO;
     }
 
+    /**
+     * Удаляет товар из корзины покупок указанного пользователя.
+     *
+     * @param userId    идентификатор пользователя
+     * @param productId идентификатор товара, который необходимо удалить
+     * @return обновленная корзина после удаления товара
+     */
     @Override
     public Bucket removeProductFromCart(Long userId, Long productId) {
         return null;

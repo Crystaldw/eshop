@@ -9,6 +9,9 @@ import lombok.NoArgsConstructor;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * Сущность, представляющая корзину покупок в системе.
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -17,26 +20,34 @@ import java.util.List;
 @Table(name = "buckets")
 public class Bucket {
 
-        private static final String SEQ_NAME = "bucket_seq";
+    private static final String SEQ_NAME = "bucket_seq";
 
-        @Id
-        @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = SEQ_NAME)
-        @SequenceGenerator(name = SEQ_NAME, sequenceName = SEQ_NAME, allocationSize = 1)
-        private Long id;
+    /**
+     * Уникальный идентификатор корзины.
+     */
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = SEQ_NAME)
+    @SequenceGenerator(name = SEQ_NAME, sequenceName = SEQ_NAME, allocationSize = 1)
+    private Long id;
 
-    @OneToOne  //одна корзина-один пользователь
-    @JoinColumn(name = "user_id") //присоединимся к колонке user_id
+    /**
+     * Пользователь, которому принадлежит данная корзина.
+     */
+    @OneToOne
+    @JoinColumn(name = "user_id")
     private User user;
 
-    //в корзине может быть куча товаров и один товар может быть в куче корзин
+    /**
+     * Список товаров в корзине.
+     */
     @ManyToMany
     @JoinTable(name = "buckets_products",
             joinColumns = @JoinColumn(name = "bucket_id"),
             inverseJoinColumns = @JoinColumn(name = "product_id"))
     private List<Product> products;
 
-
+    /**
+     * Дата создания корзины.
+     */
     private Date createDate;
-
-
 }
