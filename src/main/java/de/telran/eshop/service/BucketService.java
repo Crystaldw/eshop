@@ -43,5 +43,5 @@ public interface BucketService {
      * @param productId идентификатор товара, который необходимо удалить
      * @return обновленная корзина после удаления товара
      */
-    Bucket removeProductFromCart(Long userId, Long productId);
+    void removeProductFromBucket(Long userId, Long productId);
 }

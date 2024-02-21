@@ -66,6 +66,11 @@ public class ProductServiceImpl implements ProductService {
         return true;
     }
 
+    @Override
+    public void removeProductById(Long id) {
+        productRepository.deleteById(id);
+    }
+
     /**
      * Добавляет указанный продукт в корзину пользователя.
      *

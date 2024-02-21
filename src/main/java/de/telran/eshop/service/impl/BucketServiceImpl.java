@@ -7,8 +7,10 @@ import de.telran.eshop.entity.Product;
 import de.telran.eshop.entity.User;
 import de.telran.eshop.repository.BucketRepository;
 import de.telran.eshop.repository.ProductRepository;
+import de.telran.eshop.repository.UserRepository;
 import de.telran.eshop.service.BucketService;
 import de.telran.eshop.service.UserService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -28,6 +30,7 @@ public class BucketServiceImpl implements BucketService {
 
     private final BucketRepository bucketRepository;
     private final ProductRepository productRepository;
+    private final UserRepository userRepository;
     private final UserService userService;
 
     /**
@@ -102,6 +105,11 @@ public class BucketServiceImpl implements BucketService {
         return bucketDTO;
     }
 
+    @Override
+    public void removeProductFromBucket(Long userId, Long productId) {
+        
+    }
+
     /**
      * Удаляет товар из корзины покупок указанного пользователя.
      *
@@ -109,9 +117,21 @@ public class BucketServiceImpl implements BucketService {
      * @param productId идентификатор товара, который необходимо удалить
      * @return обновленная корзина после удаления товара
      */
-    @Override
-    public Bucket removeProductFromCart(Long userId, Long productId) {
-        return null;
-    }
 
+//    @Override
+//    @Transactional
+//    public void removeProductFromBucket(Long userId, Long productId) {
+////        public void removeProductFromCart(String username, Long productId) {
+//            User user = userRepository.findAllById(Long userId);
+//            if (user != null) {
+//                // Удаляем productId из корзины пользователя
+//                user.getBucket().
+//            } else {
+//                throw new RuntimeException("Пользователь не найден");
+//            }
+//    }
 }
+
+
+
+

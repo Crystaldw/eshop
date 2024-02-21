@@ -1,6 +1,7 @@
 package de.telran.eshop.service;
 
 import de.telran.eshop.dto.ProductDTO;
+import de.telran.eshop.entity.Product;
 
 import java.util.List;
 
@@ -23,6 +24,8 @@ public interface ProductService {
      * @return true, если продукт успешно сохранен, в противном случае - false
      */
     boolean save(ProductDTO productDTO);
+
+    void removeProductById (Long id);
 
     /**
      * Добавляет указанный продукт в корзину пользователя.
