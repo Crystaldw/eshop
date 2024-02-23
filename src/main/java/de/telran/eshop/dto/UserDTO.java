@@ -9,9 +9,9 @@ import lombok.NoArgsConstructor;
  * DTO, представляющий информацию о пользователе.
  */
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 public class UserDTO {
 
     /**
@@ -33,4 +33,11 @@ public class UserDTO {
      * Электронная почта пользователя.
      */
     private String email;
+
+    public UserDTO(String username, String email) {
+        this.username = username;
+        this.email = email;
+
+    }
+
 }

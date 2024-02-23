@@ -3,6 +3,7 @@ package de.telran.eshop.controller;
 import de.telran.eshop.dto.UserDTO;
 import de.telran.eshop.entity.User;
 import de.telran.eshop.service.UserService;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -124,8 +125,8 @@ public class UserController {
                 && !dto.getPassword().isEmpty()
                 && !Objects.equals(dto.getPassword(), dto.getMatchingPassword())) {
             model.addAttribute("user", dto);
+            throw new RuntimeException("Пароли не совпадают");
             // добавить какое-то сообщение
-            return "profile";
         }
         userService.updateProfile(dto);
         return "redirect:/users/profile";
