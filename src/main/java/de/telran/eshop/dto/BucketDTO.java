@@ -17,6 +17,8 @@ import java.util.List;
 @Builder
 public class BucketDTO {
 
+    private Long userId;
+
     /**
      * Количество товаров в корзине.
      */

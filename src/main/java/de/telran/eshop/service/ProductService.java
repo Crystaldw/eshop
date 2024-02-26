@@ -25,8 +25,6 @@ public interface ProductService {
      */
     boolean save(ProductDTO productDTO);
 
-    void removeProductById (Long id);
-
     /**
      * Добавляет указанный продукт в корзину пользователя.
      *

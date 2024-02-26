@@ -2,9 +2,12 @@ package de.telran.eshop.controller;
 
 import de.telran.eshop.dto.UserDTO;
 import de.telran.eshop.entity.User;
+import de.telran.eshop.repository.UserRepository;
 import de.telran.eshop.service.UserService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -22,14 +25,16 @@ import java.util.Objects;
 public class UserController {
 
     private final UserService userService;
+    private final UserRepository userRepository;
 
     /**
      * Конструктор контроллера.
      * @param userService Сервис пользователей для взаимодействия с базой данных пользователей.
      */
     @Autowired
-    public UserController(UserService userService) {
+    public UserController(UserService userService, UserRepository userRepository) {
         this.userService = userService;
+        this.userRepository = userRepository;
     }
 
     /**
@@ -130,5 +135,11 @@ public class UserController {
         }
         userService.updateProfile(dto);
         return "redirect:/users/profile";
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<HttpStatus> deleteUser(@PathVariable Long id){
+        userRepository.deleteById(id);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

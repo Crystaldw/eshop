@@ -4,6 +4,7 @@ import de.telran.eshop.dto.BucketDTO;
 import de.telran.eshop.entity.Bucket;
 import de.telran.eshop.entity.User;
 
+import java.security.Principal;
 import java.util.List;
 
 /**
@@ -39,9 +40,10 @@ public interface BucketService {
     /**
      * Удаляет товар из корзины покупок указанного пользователя.
      *
-     * @param userId    идентификатор пользователя
      * @param productId идентификатор товара, который необходимо удалить
      * @return обновленная корзина после удаления товара
      */
-    void removeProductFromBucket(Long userId, Long productId);
+    void removeProductFromBucket(Long productId);
+
+    void commitBucketToOrder(String username);
 }

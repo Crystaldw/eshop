@@ -2,23 +2,19 @@ package de.telran.eshop.service.impl;
 
 import de.telran.eshop.dto.BucketDTO;
 import de.telran.eshop.dto.BucketDetailDTO;
-import de.telran.eshop.entity.Bucket;
-import de.telran.eshop.entity.Product;
-import de.telran.eshop.entity.User;
+import de.telran.eshop.entity.*;
+import de.telran.eshop.entity.enums.OrderStatus;
 import de.telran.eshop.repository.BucketRepository;
 import de.telran.eshop.repository.ProductRepository;
-import de.telran.eshop.repository.UserRepository;
 import de.telran.eshop.service.BucketService;
+import de.telran.eshop.service.OrderService;
 import de.telran.eshop.service.UserService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -30,8 +26,8 @@ public class BucketServiceImpl implements BucketService {
 
     private final BucketRepository bucketRepository;
     private final ProductRepository productRepository;
-    private final UserRepository userRepository;
     private final UserService userService;
+    private final OrderService orderService;
 
     /**
      * Создает новую корзину для указанного пользователя и добавляет в неё товары.
@@ -94,7 +90,7 @@ public class BucketServiceImpl implements BucketService {
             if (detail == null) {
                 mapByProductId.put(product.getId(), new BucketDetailDTO(product));
             } else {
-                detail.setAmount(detail.getAmount().add(new BigDecimal(1.0)));
+                detail.setAmount(detail.getAmount().add(new BigDecimal("1.0")));
                 detail.setSum(detail.getSum() + Double.valueOf(product.getPrice().toString()));
             }
         }
@@ -105,32 +101,62 @@ public class BucketServiceImpl implements BucketService {
         return bucketDTO;
     }
 
-    @Override
-    public void removeProductFromBucket(Long userId, Long productId) {
-        
-    }
-
     /**
      * Удаляет товар из корзины покупок указанного пользователя.
+     * <p>
+     * //     * @param userId    идентификатор пользователя
      *
-     * @param userId    идентификатор пользователя
      * @param productId идентификатор товара, который необходимо удалить
      * @return обновленная корзина после удаления товара
      */
-
-//    @Override
-//    @Transactional
-//    public void removeProductFromBucket(Long userId, Long productId) {
-////        public void removeProductFromCart(String username, Long productId) {
-//            User user = userRepository.findAllById(Long userId);
-//            if (user != null) {
-//                // Удаляем productId из корзины пользователя
-//                user.getBucket().
-//            } else {
-//                throw new RuntimeException("Пользователь не найден");
-//            }
+//    public void removeProductFromBucket(Long productId, Long userId) {
+//        Bucket bucketDelete = bucketRepository.getByProductIdAndUserId(productId, userId);
+//        bucketRepository.delete(bucketDelete);
 //    }
+    @Override
+    public void removeProductFromBucket(Long productId) {
+        System.out.println("Удаление товара");
+        Bucket bucketDeleteProduct = bucketRepository.getByProductId(productId);
+        bucketRepository.delete(bucketDeleteProduct);
+    }
+
+    @Override
+    @Transactional
+    public void commitBucketToOrder(String username) {
+        User user = userService.findByName(username);
+        if (user == null) {
+            throw new RuntimeException("User is not found");
+        }
+        Bucket bucket = user.getBucket();
+        if (bucket == null || bucket.getProducts().isEmpty()) {
+            return;
+        }
+
+        Order order = new Order();
+        order.setStatus(OrderStatus.NEW);
+        order.setUser(user);
+
+        Map<Product, Long> productWithAmount = bucket.getProducts().stream()
+                .collect(Collectors.groupingBy(product -> product, Collectors.counting()));
+
+        List<OrderDetails> orderDetails = productWithAmount.entrySet().stream()
+                .map(pair -> new OrderDetails(order, pair.getKey(), pair.getValue()))
+                .toList();
+
+        BigDecimal total = new BigDecimal(orderDetails.stream()
+                .map(detail -> detail.getPrice().multiply(detail.getAmount()))
+                .mapToDouble(BigDecimal::doubleValue).sum());
+
+        order.setDetails(orderDetails);
+        order.setSum(total);
+        order.setAddress("none");
+
+        orderService.saveOrder(order);
+        bucket.getProducts().clear();
+        bucketRepository.save(bucket);
+    }
 }
+
 
 
 
