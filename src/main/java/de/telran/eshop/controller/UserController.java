@@ -57,7 +57,7 @@ public class UserController {
     @PreAuthorize("hasAnyAuthority('ADMIN')") // доступ к данному методу только администратору
     @GetMapping("/new")
     public String newUser(Model model) {
-        System.out.println("Вызван метод создания нового пользователя"); // для нас
+        System.out.println("Вызван метод создания нового пользователя"); // для меня
         model.addAttribute("user", new UserDTO());
         return "user";
     }
@@ -99,6 +99,7 @@ public class UserController {
      * @param principal Интерфейс для доступа к информации о текущем пользователе.
      * @return Имя представления для страницы профиля пользователя.
      */
+    @PreAuthorize("isAuthenticated()") //метод может быть вызван только аутентифицированными пользователями
     @GetMapping("/profile")
     public String profileUser(Model model, Principal principal) {
         if (principal == null) {
@@ -121,6 +122,7 @@ public class UserController {
      * @param principal Интерфейс для доступа к информации о текущем пользователе.
      * @return Перенаправление на страницу профиля пользователя.
      */
+    @PreAuthorize("isAuthenticated()") //метод может быть вызван только аутентифицированными пользователями
     @PostMapping("/profile")
     public String updateProfileUser(UserDTO dto, Model model, Principal principal) {
         if (principal == null || !Objects.equals(principal.getName(), dto.getUsername())) {
@@ -137,8 +139,9 @@ public class UserController {
         return "redirect:/users/profile";
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<HttpStatus> deleteUser(@PathVariable Long id){
+    public ResponseEntity<HttpStatus> deleteUser(@PathVariable User id){
         userRepository.deleteById(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }

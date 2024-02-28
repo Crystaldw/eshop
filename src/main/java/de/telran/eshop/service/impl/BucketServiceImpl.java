@@ -76,29 +76,29 @@ public class BucketServiceImpl implements BucketService {
      */
     @Override
     public BucketDTO getBucketByUser(String name) {
-        User user = userService.findByName(name);
-        if (user == null || user.getBucket() == null) {
+        User user = userService.findByName(name); // Находим пользователя по его имени
+        if (user == null || user.getBucket() == null) { // Если пользователь не найден или у него нет корзины, возвращаем пустую корзину в формате DTO
             return new BucketDTO();
         }
 
-        BucketDTO bucketDTO = new BucketDTO();
-        Map<Long, BucketDetailDTO> mapByProductId = new HashMap<>();
+        BucketDTO bucketDTO = new BucketDTO(); // Создаем объект DTO для корзины пользователя
+        Map<Long, BucketDetailDTO> mapByProductId = new HashMap<>(); // Создаем отображение (Map), чтобы группировать товары по их идентификатору
 
-        List<Product> products = user.getBucket().getProducts();
-        for (Product product : products) {
-            BucketDetailDTO detail = mapByProductId.get(product.getId());
-            if (detail == null) {
+        List<Product> products = user.getBucket().getProducts(); // Получаем список товаров из корзины пользователя
+        for (Product product : products) { // Обходим каждый товар в корзине
+            BucketDetailDTO detail = mapByProductId.get(product.getId()); // Получаем детали товара по его идентификатору из отображения
+            if (detail == null) { // Если деталей товара нет в отображении, добавляем новые
                 mapByProductId.put(product.getId(), new BucketDetailDTO(product));
             } else {
-                detail.setAmount(detail.getAmount().add(new BigDecimal("1.0")));
+                detail.setAmount(detail.getAmount().add(new BigDecimal("1.0")));  // Если детали уже существуют, увеличиваем количество товара на 1 и обновляем сумму
                 detail.setSum(detail.getSum() + Double.valueOf(product.getPrice().toString()));
             }
         }
 
-        bucketDTO.setBucketDetails(new ArrayList<>(mapByProductId.values()));
-        bucketDTO.aggregate();
+        bucketDTO.setBucketDetails(new ArrayList<>(mapByProductId.values())); // Устанавливаем детали корзины из отображения в DTO объект
+        bucketDTO.aggregate(); // Выполняем агрегацию деталей корзины
 
-        return bucketDTO;
+        return bucketDTO; // Возвращаем заполненную корзину в формате DTO
     }
 
     /**
@@ -113,46 +113,57 @@ public class BucketServiceImpl implements BucketService {
 //        Bucket bucketDelete = bucketRepository.getByProductIdAndUserId(productId, userId);
 //        bucketRepository.delete(bucketDelete);
 //    }
+
+    /**
+     * Удаляет товар из корзины покупок.
+     *
+     * @param productId идентификатор товара, который необходимо удалить
+     */
     @Override
     public void removeProductFromBucket(Long productId) {
-        System.out.println("Удаление товара");
         Bucket bucketDeleteProduct = bucketRepository.getByProductId(productId);
         bucketRepository.delete(bucketDeleteProduct);
     }
 
+    /**
+     * Формирует заказ на основе содержимого корзины покупок указанного пользователя и сохраняет его в системе.
+     * Если корзина пуста или пользователь не найден, метод завершает свою работу без создания заказа.
+     *
+     * @param username имя пользователя, для которого формируется заказ
+     */
     @Override
     @Transactional
     public void commitBucketToOrder(String username) {
-        User user = userService.findByName(username);
-        if (user == null) {
+        User user = userService.findByName(username); // Находим пользователя по его имени
+        if (user == null) {  // Если пользователь не найден, выбрасываем исключение
             throw new RuntimeException("User is not found");
         }
-        Bucket bucket = user.getBucket();
-        if (bucket == null || bucket.getProducts().isEmpty()) {
+        Bucket bucket = user.getBucket(); // Получаем корзину пользователя
+        if (bucket == null || bucket.getProducts().isEmpty()) {  // Если корзина пуста или не существует, завершаем метод
             return;
         }
 
-        Order order = new Order();
+        Order order = new Order(); // Создаем новый заказ и устанавливаем его статус и пользователя
         order.setStatus(OrderStatus.NEW);
         order.setUser(user);
 
-        Map<Product, Long> productWithAmount = bucket.getProducts().stream()
+        Map<Product, Long> productWithAmount = bucket.getProducts().stream()  // Группируем товары в корзине по количеству
                 .collect(Collectors.groupingBy(product -> product, Collectors.counting()));
 
-        List<OrderDetails> orderDetails = productWithAmount.entrySet().stream()
+        List<OrderDetails> orderDetails = productWithAmount.entrySet().stream() // Создаем список деталей заказа на основе товаров в корзине
                 .map(pair -> new OrderDetails(order, pair.getKey(), pair.getValue()))
                 .toList();
 
-        BigDecimal total = new BigDecimal(orderDetails.stream()
+        BigDecimal total = new BigDecimal(orderDetails.stream() // Вычисляем общую сумму заказа
                 .map(detail -> detail.getPrice().multiply(detail.getAmount()))
                 .mapToDouble(BigDecimal::doubleValue).sum());
 
-        order.setDetails(orderDetails);
+        order.setDetails(orderDetails); // Устанавливаем детали и сумму заказа, а также адрес (в данном случае неуказанный)
         order.setSum(total);
         order.setAddress("none");
 
-        orderService.saveOrder(order);
-        bucket.getProducts().clear();
+        orderService.saveOrder(order); // Сохраняем заказ в системе
+        bucket.getProducts().clear(); // Очищаем содержимое корзины и сохраняем ее в системе
         bucketRepository.save(bucket);
     }
 }

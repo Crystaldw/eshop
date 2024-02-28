@@ -17,4 +17,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
      * @return найденный пользователь
      */
     User findFirstByName(String name);
+    void deleteById(User id);
 }

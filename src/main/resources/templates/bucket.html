@@ -22,7 +22,7 @@
         <td th:text="${detail.amount}">2</td>
         <td th:text="${detail.price}">11.0</td>
         <td th:text="${detail.sum}">22</td>
-        <td><a th:href="@{'/bucket/remove/' + ${detail.productId}}" method="delete">Remove</a></td>
+        <td><a href="#!" th:href="@{/bucket/remove/{productId}(productId=${detail.productId})}" th:method="delete">Remove</a></td>
 <!--        <td><a th:href="@{/bucket/remove/{userId}/{productId}(userId=${bucket.userId}, productId=${product.id})}">Remove</a></td>-->
 <!--                <td><a th:href="@{/bucket/remove/{Id}(id=${productId})}">Remove</a></td>-->
 <!--        <td><a th:href="@{/remove/{id}(id=${product.id})}" >Delete</a></td>-->

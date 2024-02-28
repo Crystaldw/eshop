@@ -7,7 +7,9 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
+/**
+ * Реализация сервиса для работы с заказами.
+ */
 
 @Service
 @RequiredArgsConstructor
@@ -15,6 +17,11 @@ public class OrderServiceImpl implements OrderService {
 
     private final OrderRepository orderRepository;
 
+    /**
+     * Сохраняет заказ в базе данных.
+     *
+     * @param order сохраняемый заказ
+     */
     @Override
     @Transactional
     public void saveOrder(Order order) {
@@ -22,6 +29,12 @@ public class OrderServiceImpl implements OrderService {
         orderRepository.save(saveOrder);
     }
 
+    /**
+     * Получает заказ по его идентификатору.
+     *
+     * @param id идентификатор заказа
+     * @return заказ, если найден, в противном случае null
+     */
     @Override
     public Order getOrder(Long id) {
         return orderRepository.findById(id).orElse(null);

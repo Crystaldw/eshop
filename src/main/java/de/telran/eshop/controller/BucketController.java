@@ -6,10 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 
@@ -37,10 +34,17 @@ public class BucketController {
         return "bucket";
     }
 
+    @PostMapping
+    public String commitBucket(Principal principal){
+        if(principal!=null){
+            bucketService.commitBucketToOrder(principal.getName());
+        }
+        return  "bucket";
+    }
+
     @DeleteMapping("/remove/{productId}")
     @PostAuthorize("isAuthenticated() and #userId==authentication.principal.username")
-    public String removeProductFromBucket(@PathVariable (value = "userId")Long userId,
-                                          @PathVariable(value = "productId")Long productId){
+    public String removeProductFromBucket(@PathVariable(value = "productId")Long productId){
         bucketService.removeProductFromBucket(productId);
         return "redirect:/bucket";
     }

@@ -57,5 +57,6 @@ public class OrderDetails {
         this.order = order;
         this.product = product;
         this.amount = new BigDecimal(amount);
+        this.price = new BigDecimal(String.valueOf(product.getPrice()));
     }
 }
